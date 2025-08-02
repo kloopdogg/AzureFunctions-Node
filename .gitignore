@@ -26,3 +26,10 @@ yarn-error.log*
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+
+# Azure Functions specific files
+local.settings.json
+.funcignore
+.vscode/
+.vscode/*.json
