@@ -22,3 +22,19 @@ The recommended folder structure for a TypeScript project looks like the followi
  | - package.json
  | - tsconfig.json
 ```
+## Running the Project
+
+To run the project locally, follow these steps:
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the project:
+   ```bash
+   npm start
+   ```
+
+This will build and run the Azure Functions project using Node.js and TypeScript.
+
+**⚠️Note:** Do not use `func start` directly, as it will not clean and build the project to the `dist` folder. Always use `npm start` to ensure the project is properly built before running.
