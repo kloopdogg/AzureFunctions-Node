@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:7071/api
+@functionsKey = 1234
+
+### Test GET request
+GET {{baseUrl}}/hello?name=Scott
+x-functions-key: {{functionsKey}}
+
+### Test POST request
+POST {{baseUrl}}/hello
+x-functions-key: {{functionsKey}}
+Content-Type: text/plain
+
+Scott
+
+### Test GET request with no name
+GET {{baseUrl}}/hello
+x-functions-key: {{functionsKey}}
+
+### Test POST request with no body
+POST {{baseUrl}}/hello
+x-functions-key: {{functionsKey}}
+Content-Type: text/plain
+
