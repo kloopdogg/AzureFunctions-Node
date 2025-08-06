@@ -4,7 +4,7 @@ export async function welcomeMessage(
     request: HttpRequest,
     context: InvocationContext
 ): Promise<HttpResponseInit> {
-    context.log(`WelcomeMessage function processing a request for url: ${request.url}`);
+    context.log(`WelcomeMessage function processing a ${request.method} request for url: ${request.url}`);
 
     const name = request.query.get('name') || await request.text();
     const messagePrefix = name ? `${name}, ` : '';

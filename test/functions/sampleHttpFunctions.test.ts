@@ -97,37 +97,39 @@ describe('welcomeMessage function', () => {
 
   describe('GET requests', () => {
     it('should log the welcome message function', async () => {
-      const expectedLogExcerpt = `Hello function processed request`;
+      const expectedLogExcerpt = `WelcomeMessage function processing a ${req.method} request for url: ${req.url}`;
       await welcomeMessage(req, context);
       expect(context.log).toHaveBeenCalledWith(
-        expect.stringContaining(expectedLogExcerpt)
+        expect.stringMatching(expectedLogExcerpt)
+      );
+    });
+    
+    it('should log the welcome message function with querystring parameter', async () => {
+      const queryName = 'Jimmy';
+      const expectedOutput = `${queryName}, Azure Functions <⚡> are awesome!`;
+      req.setQuery(new URLSearchParams({ name: queryName }));
+      const expectedLogExcerpt = `WelcomeMessage function processing a ${req.method} request for url: ${req.url}`;
+      await welcomeMessage(req, context);
+      expect(context.log).toHaveBeenCalledWith(
+        expect.stringMatching(expectedLogExcerpt)
       );
     });
 
-    it('should log the request URL', async () => {
-      await welcomeMessage(req, context);
-      expect(context.log).toHaveBeenCalledWith(
-        expect.stringContaining(req.url)
-      );
-    });
-
-    it('empty request should return a response with status 200', async () => {
+    it('empty request should return a 200 response with default message', async () => {
+      const expectedOutput = 'Azure Functions <⚡> are awesome!';
       const result = await welcomeMessage(req, context);
       expect(result.status).toBe(200);
-    });
-
-    it('empty request should return a response with default message', async () => {
-      const expectedOutput = 'Hello, world!';
-      const result = await welcomeMessage(req, context);
       expect(result.body).toBeDefined();
       expect(result.body).toBe(expectedOutput);
     });
 
-    it('should use name from query parameter when provided', async () => {
-      const name = 'John';
-      const expectedOutput = `Hello, ${name}!`;
+    it('request with query parameter should return a 200 response with custom message', async () => {
+      const name = 'Jimmy';
+      const expectedOutput = `${name}, Azure Functions <⚡> are awesome!`;
       req.setQuery(new URLSearchParams({ name }));
       const result = await welcomeMessage(req, context);
+      expect(result.status).toBe(200);
+      expect(result.body).toBeDefined();
       expect(result.body).toBe(expectedOutput);
     });
   });
@@ -136,22 +138,63 @@ describe('welcomeMessage function', () => {
     beforeEach(() => {
       req.setMethod('POST');
     });
+    
+    it('should log the welcome message function', async () => {
+      const expectedLogExcerpt = `WelcomeMessage function processing a ${req.method} request for url: ${req.url}`;
+      await welcomeMessage(req, context);
+      expect(context.log).toHaveBeenCalledWith(
+        expect.stringMatching(expectedLogExcerpt)
+      );
+    });
+    
+    it('should log the welcome message function with querystring parameter', async () => {
+      const queryName = 'Jimmy';
+      const expectedOutput = `${queryName}, Azure Functions <⚡> are awesome!`;
+      req.setQuery(new URLSearchParams({ name: queryName }));
+      const expectedLogExcerpt = `WelcomeMessage function processing a ${req.method} request for url: ${req.url}`;
+      await welcomeMessage(req, context);
+      expect(context.log).toHaveBeenCalledWith(
+        expect.stringMatching(expectedLogExcerpt)
+      );
+    });
 
-    it('should use name from request body when provided', async () => {
-      const name = 'Jane';
-      const expectedOutput = `Hello, ${name}!`;
-      req.setText(name);
+    it('empty request body should return a 200 response with default message', async () => {
+      const expectedOutput = `Azure Functions <⚡> are awesome!`;
       const result = await welcomeMessage(req, context);
+      expect(result.status).toBe(200);
+      expect(result.body).toBeDefined();
       expect(result.body).toBe(expectedOutput);
     });
 
-    it('should prefer query parameter over body content', async () => {
-      const bodyName = 'Jane';
-      const queryName = 'John';
-      const expectedOutput = `Hello, ${queryName}!`;
+    it('request with query should return a 200 response with custom message', async () => {
+      const name = 'Jimmy';
+      const expectedOutput = `${name}, Azure Functions <⚡> are awesome!`;
+      req.setQuery(new URLSearchParams({ name }));
+      const result = await welcomeMessage(req, context);
+      expect(result.status).toBe(200);
+      expect(result.body).toBeDefined();
+      expect(result.body).toBe(expectedOutput);
+    });
+
+    it('request with body should return a 200 response with custom message', async () => {
+      const name = 'Jimmy';
+      const expectedOutput = `${name}, Azure Functions <⚡> are awesome!`;
+      req.setText(name);
+      const result = await welcomeMessage(req, context);
+      expect(result.status).toBe(200);
+      expect(result.body).toBeDefined();
+      expect(result.body).toBe(expectedOutput);
+    });
+
+    it('request with body and query should prefer query parameter over body content', async () => {
+      const bodyName = 'John';
+      const queryName = 'Jimmy';
+      const expectedOutput = `${queryName}, Azure Functions <⚡> are awesome!`;
       req.setText(bodyName);
       req.setQuery(new URLSearchParams({ name: queryName }));
       const result = await welcomeMessage(req, context);
+      expect(result.status).toBe(200);
+      expect(result.body).toBeDefined();
       expect(result.body).toBe(expectedOutput);
     });
   });
