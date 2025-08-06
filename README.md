@@ -2,26 +2,33 @@
 Sample Azure Functions project with Node and TypeScript
 
 ## Project Structure
-The recommended folder structure for a TypeScript project looks like the following example:
+The recommended folder structure for a TypeScript Azure Functions application looks like the following example:
 ```text
 <project_root>/
- | - .vscode/
- | - dist/
- | - node_modules/
- | - src/
- | | - functions/
- | | | - myFirstFunction.ts
- | | | - mySecondFunction.ts
- | - test/
- | | - functions/
- | | | - myFirstFunction.test.ts
- | | | - mySecondFunction.test.ts
- | - .funcignore
- | - host.json
- | - local.settings.json
- | - package.json
- | - tsconfig.json
+├── docs/
+│   ├── architecture.md
+│   ├── api-contract.md
+│   └── troubleshooting.md
+├── src/
+│   ├── functions/
+│   │   ├── myFirstFunction.ts
+│   │   └── mySecondFunction.ts
+│   └── index.ts
+├── test/
+│   ├── functions/
+│   │   ├── myFirstFunction.test.ts
+│   │   └── mySecondFunction.test.ts
+│   └── rest/
+│       ├── myFirstFunction.http
+│       └── mySecondFunction.http
+├── .funcignore
+├── host.json
+├── jest.config.js
+├── local.settings.json
+├── package.json
+└── tsconfig.json
 ```
+
 ## Running the Project
 
 To run the project locally, follow these steps:

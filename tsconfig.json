@@ -12,5 +12,7 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "sourceMap": false,
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["test", "dist", "node_modules"]
 }

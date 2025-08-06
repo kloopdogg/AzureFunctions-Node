@@ -1,5 +1,5 @@
 import { HttpRequest, InvocationContext } from '@azure/functions';
-import { hello } from '../../src/functions/hello';
+import { welcomeMessage } from '../../src/functions/sampleHttpFunctions';
 import { Blob } from 'buffer';
 import { FormData, Headers } from 'undici';
 
@@ -17,11 +17,20 @@ class MockHttpRequest implements HttpRequest {
   constructor(options: Partial<{
     method: string;
     url: string;
+    urlPath: string;
     query: URLSearchParams;
     text: string;
   }> = {}) {
     this.method = options.method || 'GET';
-    this.url = options.url || 'http://localhost/api/hello';
+    if (options.url) {
+      this.url = options.url;
+    } else {
+      const baseUrl = 'http://nodefunction.sample.com/';
+      if (!options.urlPath) {
+        options.urlPath = 'api/test';
+      }
+      this.url = new URL(options.urlPath, baseUrl).toString();
+    }
     this.headers = new Headers();
     this.query = options.query || new URLSearchParams();
     this.params = {};
@@ -60,17 +69,25 @@ class MockHttpRequest implements HttpRequest {
     });
   }
 
+  public setMethod(method: string): void {
+    this.method = method;
+  }
+
   public setText(text: string): void {
     this._text = text;
   }
+
+  public setQuery(query: URLSearchParams): void {
+    this.query = query;
+  }
 }
 
-describe('hello function', () => {
+describe('welcomeMessage function', () => {
   let req: MockHttpRequest;
   let context: InvocationContext;
 
   beforeEach(() => {
-    req = new MockHttpRequest();
+    req = new MockHttpRequest({ urlPath: '/api/WelcomeMessage' });
     context = new InvocationContext({
       functionName: 'testFunctionName',
       invocationId: 'testInvocationId',
@@ -79,57 +96,63 @@ describe('hello function', () => {
   });
 
   describe('GET requests', () => {
+    it('should log the welcome message function', async () => {
+      const expectedLogExcerpt = `Hello function processed request`;
+      await welcomeMessage(req, context);
+      expect(context.log).toHaveBeenCalledWith(
+        expect.stringContaining(expectedLogExcerpt)
+      );
+    });
+
+    it('should log the request URL', async () => {
+      await welcomeMessage(req, context);
+      expect(context.log).toHaveBeenCalledWith(
+        expect.stringContaining(req.url)
+      );
+    });
+
     it('empty request should return a response with status 200', async () => {
-      const result = await hello(req, context);
+      const result = await welcomeMessage(req, context);
       expect(result.status).toBe(200);
     });
 
     it('empty request should return a response with default message', async () => {
-      const result = await hello(req, context);
+      const expectedOutput = 'Hello, world!';
+      const result = await welcomeMessage(req, context);
       expect(result.body).toBeDefined();
-      expect(result.body).toBe('Hello, world!');
+      expect(result.body).toBe(expectedOutput);
     });
 
     it('should use name from query parameter when provided', async () => {
       const name = 'John';
-      req = new MockHttpRequest({ query: new URLSearchParams({ name }) });
-      const result = await hello(req, context);
-      expect(result.body).toBe(`Hello, ${name}!`);
-    });
-
-    it('should log the request URL', async () => {
-      await hello(req, context);
-      expect(context.log).toHaveBeenCalledWith(
-        expect.stringContaining(req.url)
-      );
+      const expectedOutput = `Hello, ${name}!`;
+      req.setQuery(new URLSearchParams({ name }));
+      const result = await welcomeMessage(req, context);
+      expect(result.body).toBe(expectedOutput);
     });
   });
 
   describe('POST requests', () => {
     beforeEach(() => {
-      req = new MockHttpRequest({ method: 'POST' });
+      req.setMethod('POST');
     });
 
     it('should use name from request body when provided', async () => {
       const name = 'Jane';
-      req = new MockHttpRequest({ 
-        method: 'POST',
-        text: name
-      });
-      const result = await hello(req, context);
-      expect(result.body).toBe(`Hello, ${name}!`);
+      const expectedOutput = `Hello, ${name}!`;
+      req.setText(name);
+      const result = await welcomeMessage(req, context);
+      expect(result.body).toBe(expectedOutput);
     });
 
     it('should prefer query parameter over body content', async () => {
-      const queryName = 'John';
       const bodyName = 'Jane';
-      req = new MockHttpRequest({ 
-        method: 'POST',
-        query: new URLSearchParams({ name: queryName }),
-        text: bodyName
-      });
-      const result = await hello(req, context);
-      expect(result.body).toBe(`Hello, ${queryName}!`);
+      const queryName = 'John';
+      const expectedOutput = `Hello, ${queryName}!`;
+      req.setText(bodyName);
+      req.setQuery(new URLSearchParams({ name: queryName }));
+      const result = await welcomeMessage(req, context);
+      expect(result.body).toBe(expectedOutput);
     });
   });
 });
