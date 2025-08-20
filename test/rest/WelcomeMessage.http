@@ -2,13 +2,14 @@
 
 @baseUrl = http://localhost:7071
 @functionKey = ABC123
+@name = Jimmy
 
-### GET request with no querystring parameters/body
+###
 GET {{baseUrl}}/api/WelcomeMessage
 x-functions-key: {{functionKey}}
 
-### GET request with name querystring parameter
-GET {{baseUrl}}/api/WelcomeMessage?name=Scott
+### 
+GET {{baseUrl}}/api/WelcomeMessage?name={{name}}
 x-functions-key: {{functionKey}}
 
 ### Test POST request with no body
@@ -21,11 +22,11 @@ POST {{baseUrl}}/api/WelcomeMessage
 x-functions-key: {{functionKey}}
 Content-Type: text/plain
 
-Scott
+{{name}}
 
 ### Test GET request with querystring and body
-GET {{baseUrl}}/api/WelcomeMessage?name=Scott
+GET {{baseUrl}}/api/WelcomeMessage?name={{name}}
 x-functions-key: {{functionKey}}
-Content-Type: text/plain
+Content-Type: application/json
 
 Oops

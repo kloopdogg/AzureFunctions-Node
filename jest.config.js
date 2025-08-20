@@ -9,5 +9,15 @@ module.exports = {
       'ts-jest',
       { tsconfig: 'tsconfig.json' }
     ]
-  }
+  },
+  coveragePathIgnorePatterns: [
+    "node_modules",
+    "<rootDir>/test/"
+  ],
+  collectCoverageFrom: [
+    "src/**/*.{ts,tsx}",
+    "!src/**/*.d.ts"
+  ],
+  coverageReporters: ["text", "lcov"],
+  coverageProvider: "v8"
 };
