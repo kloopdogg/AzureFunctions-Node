@@ -17,6 +17,7 @@ export async function welcomeMessage(
     return { status: 200, body: `${messagePrefix}Azure Functions <⚡> are awesome!` };
 };
 
+// HTTP trigger function that responds to both GET and POST requests
 app.http('WelcomeMessage', {
     methods: ['GET', 'POST'],
     authLevel: 'anonymous',
