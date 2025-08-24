@@ -77,7 +77,7 @@ describe('processQueueMessage', () => {
 
         // Assert
         expect(context.log).toHaveBeenCalledWith('Message Content-Type: application/json');
-        expect(context.log).toHaveBeenCalledWith('Invalid EventInfo: {}');
+        expect(context.log).toHaveBeenCalledWith('Invalid SampleInfo: {}');
     });
 
     it('should handle JSON missing name key', async () => {
@@ -93,7 +93,7 @@ describe('processQueueMessage', () => {
 
         // Assert
         expect(context.log).toHaveBeenCalledWith('Message Content-Type: application/json');
-        expect(context.log).toHaveBeenCalledWith('Invalid EventInfo: {"id":"99"}');
+        expect(context.log).toHaveBeenCalledWith('Invalid SampleInfo: {"id":"99"}');
     });
 
     it('should handle JSON missing id key', async () => {
@@ -109,7 +109,7 @@ describe('processQueueMessage', () => {
 
         // Assert
         expect(context.log).toHaveBeenCalledWith('Message Content-Type: application/json');
-        expect(context.log).toHaveBeenCalledWith('Invalid EventInfo: {"name":"Test"}');
+        expect(context.log).toHaveBeenCalledWith('Invalid SampleInfo: {"name":"Test"}');
     });
 
     it('should handle non-JSON message body', async () => {

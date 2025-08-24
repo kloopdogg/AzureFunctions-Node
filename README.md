@@ -5,6 +5,7 @@ Sample Azure Functions project with Node and TypeScript
 The recommended folder structure for a TypeScript Azure Functions application looks like the following example:
 ```text
 <project_root>/
+├── .vscode/
 ├── docs/
 ├── src/
 │   ├── functions/
