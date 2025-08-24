@@ -19,5 +19,4 @@ module.exports = {
     "!src/**/*.d.ts"
   ],
   coverageReporters: ["text", "lcov"],
-  coverageProvider: "v8"
 };

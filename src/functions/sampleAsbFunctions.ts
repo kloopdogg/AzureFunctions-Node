@@ -18,14 +18,14 @@ export async function processQueueMessage(
     let eventInfo: EventInfo;
     try {
         eventInfo = typeof message === 'string'
-            ? JSON.parse(message)
+            ? JSON.parse(message) as EventInfo
             : (message as EventInfo);
-    } catch {
+    } catch (error) {
         context.log(`Invalid message body: ${message}`);
         return;
     }
-    
-    if (!eventInfo?.name || !eventInfo?.id) {
+
+    if (!eventInfo || !eventInfo.name || !eventInfo.id) {
         context.log(`Invalid EventInfo: ${JSON.stringify(eventInfo)}`);
         return;
     }
