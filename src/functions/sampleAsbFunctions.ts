@@ -1,5 +1,5 @@
 import { app, InvocationContext } from '@azure/functions';
-import { EventInfo } from '../models/eventInfo';
+import { SampleInfo } from '../models/sampleInfo';
 
 /**
  * Processes messages from the Service Bus queue using a Service Bus trigger.
@@ -15,11 +15,11 @@ export async function processQueueMessage(
     context.log(`Message ID: ${context.triggerMetadata?.messageId}`);
     context.log(`Message Content-Type: ${context.triggerMetadata?.contentType}`);
 
-    let eventInfo: EventInfo;
+    let eventInfo: SampleInfo;
     try {
         eventInfo = typeof message === 'string'
-            ? JSON.parse(message) as EventInfo
-            : (message as EventInfo);
+            ? JSON.parse(message) as SampleInfo
+            : (message as SampleInfo);
     } catch (error) {
         context.log(`Invalid message body: ${message}`);
         return;
