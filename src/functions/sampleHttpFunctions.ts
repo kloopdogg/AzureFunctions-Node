@@ -14,6 +14,9 @@ export async function welcomeMessage(
     const name = request.query.get('name') || await request.text();
     const messagePrefix = name ? `${name}, ` : '';
 
+    // Simulate some work being done
+    await new Promise(resolve => setTimeout(resolve, 250));
+
     return { status: 200, body: `${messagePrefix}Azure Functions <⚡> are awesome!` };
 };
 

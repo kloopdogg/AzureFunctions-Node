@@ -10,6 +10,9 @@ export async function scheduledWork(
     if (functionTimer.isPastDue) {
         context.log('Timer function is past due!');
     }
+
+    // Simulate some work being done
+    await new Promise(resolve => setTimeout(resolve, 250));
     
     context.log(`Node.js timer trigger function ran at ${utcTimestamp}`);
 }
