@@ -6,18 +6,23 @@ The recommended folder structure for a TypeScript Azure Functions application lo
 ```text
 <project_root>/
 ├── docs/
-│   ├── architecture.md
-│   ├── api-contract.md
-│   └── troubleshooting.md
 ├── src/
 │   ├── functions/
 │   │   ├── myFirstFunction.ts
 │   │   └── mySecondFunction.ts
+│   ├── models/
+│   │   └── model1.ts
+│   ├── utils/
+│   │   └── util1.ts
 │   └── index.ts
 ├── test/
+│   ├── fakes/
+│   │   └── fake11.ts
 │   ├── functions/
 │   │   ├── myFirstFunction.test.ts
 │   │   └── mySecondFunction.test.ts
+│   ├── mocks/
+│   │   └── mock1.ts
 │   └── rest/
 │       ├── myFirstFunction.http
 │       └── mySecondFunction.http
