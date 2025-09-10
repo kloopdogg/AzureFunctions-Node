@@ -15,9 +15,9 @@ export async function processQueueMessage(
     context.log(`Message ID: ${context.triggerMetadata?.messageId}`);
     context.log(`Message Content-Type: ${context.triggerMetadata?.contentType}`);
 
-    let SampleInfo: SampleInfo;
+    let sampleInfo: SampleInfo;
     try {
-        SampleInfo = typeof message === 'string'
+        sampleInfo = typeof message === 'string'
             ? JSON.parse(message) as SampleInfo
             : (message as SampleInfo);
     } catch (error) {
@@ -25,12 +25,12 @@ export async function processQueueMessage(
         return;
     }
 
-    if (!SampleInfo || !SampleInfo.name || !SampleInfo.id) {
-        context.log(`Invalid SampleInfo: ${JSON.stringify(SampleInfo)}`);
+    if (!sampleInfo || !sampleInfo.name || !sampleInfo.id) {
+        context.log(`Invalid SampleInfo: ${JSON.stringify(sampleInfo)}`);
         return;
     }
     
-    context.log(`Processing event: ${SampleInfo.name} (${SampleInfo.id})`);
+    context.log(`Processing event: ${sampleInfo.name} (${sampleInfo.id})`);
 
     // Simulate some work being done
     await new Promise(resolve => setTimeout(resolve, 250));
